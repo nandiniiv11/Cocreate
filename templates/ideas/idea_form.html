@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if edit_mode %}Edit Idea{% else %}New Idea{% endif %} — CoCreate
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="idea-form-container">
+  <h2>
+    {% if edit_mode %}Edit{% else %}Submit New{% endif %} Idea
+  </h2>
+
+  <form method="post" class="idea-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {{ form.title.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {{ form.description.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.categories.label_tag }}
+      {{ form.categories }}
+      {{ form.categories.errors }}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        {% if edit_mode %}Save Changes{% else %}Submit Idea{% endif %}
+      </button>
+      <a
+        href="{% if edit_mode %}{% url 'idea_detail' idea.pk %}{% else %}{% url 'idea_list' %}{% endif %}"
+        class="btn btn-secondary"
+      >
+        Cancel
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}All Ideas – CoCreate{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>All Ideas</h1>
+
+<div class="ideas-list">
+  {% for idea in ideas %}
+    <div class="idea-card">
+      <h3><a href="{% url 'idea_detail' idea.pk %}">{{ idea.title }}</a></h3>
+      <p>{{ idea.description|truncatechars:150 }}</p>
+      <small>By {{ idea.created_by.username }} on {{ idea.created_at|date:"M d, Y" }}</small>
+    </div>
+  {% empty %}
+    <p>No ideas have been submitted yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

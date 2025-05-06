@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="browse-ideas-container">
+    <h1 class="browse-ideas-title">Browse Ideas</h1>
+
+    <form method="get" class="search-form">
+        <label for="category">Filter by category:</label>
+        <select name="category" id="category">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if request.GET.category|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>
+                    {{ cat.name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if ideas %}
+        <ul class="ideas-list">
+            {% for idea in ideas %}
+                <li>
+                    <a href="{% url 'idea_detail' idea.pk %}" class="idea-link">
+                        {{ idea.title }}
+                    </a>
+                    <div class="idea-meta">
+                        <span>By: {{ idea.created_by.username }}</span>
+                        <span>{{ idea.created_at|date:"F j, Y" }}</span>
+                     </div>
+                     <div class="idea-categories">
+                        {% for category in idea.categories.all %}
+                            <span class="category-pill">{{ category.name }}</span>
+                        {% endfor %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty-state">
+            <h3>No ideas found</h3>
+            <p>No ideas match your criteria.  Try selecting a different category.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+

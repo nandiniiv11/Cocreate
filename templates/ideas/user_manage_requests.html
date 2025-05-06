@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>Manage Requests</h1>
+  
+  {% if join_requests %}
+    <ul>
+      {% for join_request in join_requests %}
+        <li>
+          <strong>{{ join_request.user.username }}</strong> wants to join <strong>{{ join_request.idea.title }}</strong>
+          (Requested on: {{ join_request.created_at }})
+          - Status: {{ join_request.status }}
+          
+          {% if join_request.status == 'pending' %}
+             <form method="post" action="{% url 'accept_request' idea_id=join_request.idea.id request_id=join_request.id %}">
+              {% csrf_token %}
+              <button type="submit" class="accept-button" id="button-grp">Accept</button>
+            </form>
+            <form method="post" action="{% url 'reject_request' idea_id=join_request.idea.id request_id=join_request.id %}">
+              {% csrf_token %}
+              <button type="submit" class="reject-button" id="button-grp">Reject</button>
+            </form>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no pending join requests.</p>
+  {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}

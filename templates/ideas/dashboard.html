@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Dashboard - CoCreate{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>My Dashboard</h1>
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <h3>My Ideas</h3>
+        <div class="stat-value">{{ ideas.count }}</div>
+    </div>
+</div>
+
+<div class="my-ideas-header">
+    <h2>My Ideas</h2>
+    <a href="{% url 'idea_create' %}" class="btn btn-primary">Submit New Idea</a>
+</div>
+
+{% if ideas %}
+    <div class="ideas-list">
+        {% for idea in ideas %}
+            <div class="idea-card">
+                <h3>{{ idea.title }}</h3>
+                <div class="idea-meta">
+                    <span>Created: {{ idea.created_at|date:"M d, Y" }}</span>
+                </div>
+                <p>{{ idea.description|truncatechars:150 }}</p>
+                <div class="idea-actions">
+                    <a href="{% url 'idea_detail' pk=idea.pk %}" class="btn btn-secondary">View</a>
+                    <a href="{% url 'idea_edit' pk=idea.pk %}" class="btn btn-secondary">Edit</a>
+                    <a href="{% url 'idea_delete' pk=idea.pk %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <h3>You haven't submitted any ideas yet</h3>
+        <p>Share your innovative ideas with the community!</p>
+        <a href="{% url 'idea_create' %}" class="btn btn-primary">Submit Your First Idea</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+    <h1 class="profile-title">My Profile</h1>
+    <form method="post" enctype="multipart/form-data" class="profile-form">
+        {% csrf_token %}
+
+        <p>
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" value="{{ user_profile.name }}">
+        </p>
+
+        <p>
+            <label for="department">Department:</label>
+            <input type="text" name="department" id="department" value="{{ user_profile.department }}">
+        </p>
+
+        <p class="resume-field">
+            <label for="resume">Resume:</label>
+            <div class="custom-file-wrapper">
+                <label class="custom-file-label">
+                    Choose File
+                    <input type="file" name="resume" id="resume" class="hidden-file-input">
+                </label>
+            </div>
+            {% if user_profile.resume %}
+                <a href="{{ user_profile.resume.url }}" class="btn btn-secondary" target="_blank">View Current Resume</a>
+            {% endif %}
+        </p>
+        
+
+        <div class="profile-buttons">
+            <button type="submit" class="profile-btn">Save Profile</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+    
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    {% endblock %}
+

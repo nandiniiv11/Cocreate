@@ -1,0 +1,21 @@
+{# templates/registration/logged_out.html #}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}You’ve been logged out{% endblock %}
+
+{% block content %}
+  <h2>You have been logged out.</h2>
+  <p><a href="{% url 'login' %}">Log in again</a></p>
+  <p>Don’t have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+{% endblock %}
+
+<form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+    
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    {% endblock %}
+

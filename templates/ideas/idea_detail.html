@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="idea-detail-container">
+    <h1 class="idea-title">{{ idea.title }}</h1>
+    <p class="idea-description">{{ idea.description }}</p>
+    <div class="idea-details">
+        <p>Category: 
+            {% for category in idea.categories.all %}  <span class="idea-category">{{ category.name }}</span> 
+            {% endfor %}
+        </p>
+        <p>Creator: <span class="idea-creator">{{ idea.created_by.username }}</span></p>
+    </div>
+
+    <div class="idea-collaborators">
+        <h4>Collaborators:</h4>
+        {% if idea.collaborators.all %}
+            <ul class="collaborator-list">
+                {% for collaborator in idea.collaborators.all %}
+                    <li>{{ collaborator.username }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No collaborators yet.</p>
+        {% endif %}
+    </div>
+
+    {% if not is_creator %}
+        <div class="request-to-join-section">
+            <h3>Request to Join</h3>
+            <form method="post" action="{% url 'send_join_request' idea.id %}">
+                {% csrf_token %}
+                <label for="message">Message (optional):</label><br>
+                <textarea name="message" rows="3" cols="40" class="request-message-input"></textarea><br><br>
+                <button type="submit" class="request-join-button">Request to Join</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'dashboard' %}" class="back-to-dashboard-button">Back to Dashboard</a>
+</div>
+{% endblock %}

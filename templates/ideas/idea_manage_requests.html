@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block content %}
+  <h1>Manage Requests for {{ idea.title }}</h1>
+  
+  {% if join_requests %}
+    <ul>
+      {% for join_request in join_requests %}
+      <li>
+        <strong>{{ join_request.applicant.username }}</strong> requested to join 
+        <strong>{{ join_request.idea.title }}</strong>
+        (Requested on: {{ join_request.created_at }}) - Status: {{ join_request.status }}
+    
+        {% if join_request.status == 'pending' %}
+          <form method="post" action="{% url 'accept_request' idea_id=join_request.idea.id request_id=join_request.id %}">
+            {% csrf_token %}
+            <button type="submit">Accept</button>
+          </form>
+          <form method="post" action="{% url 'reject_request' request_id=join_request.id %}">
+            {% csrf_token %}
+            <button type="submit">Reject</button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+    
+    </ul>
+  {% else %}
+    <p>No join requests for this idea.</p>
+  {% endif %}
+  
+  <a href="{% url 'idea_detail' pk=idea.pk %}">Back to Idea Details</a>
+{% endblock %}
+    
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+    {% endblock %}

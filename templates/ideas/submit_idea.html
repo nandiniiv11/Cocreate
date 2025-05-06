@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="idea-form-container">
+  <h1 class="idea-form-title">Submit a New Idea</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-group">
+      {{ form.title.label_tag }}
+      {{ form.title }}
+      {{ form.title.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {{ form.description.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.categories.label_tag }}
+      <div class="tag-checkbox-group">
+        {% for checkbox in form.categories %}
+          <label class="tag-checkbox">
+            {{ checkbox.tag }}
+            <span>{{ checkbox.choice_label }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      {{ form.categories.errors }}
+    </div>
+
+    <button type="submit" class="btn">Submit Idea</button>
+  </form>
+</div>
+{% endblock %}

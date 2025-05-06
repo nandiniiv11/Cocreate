@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/ideas.css' %}">
+{% endblock %}
+
+{% block title %}Delete Idea — CoCreate{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>Delete Idea</h1>
+    <p>Are you sure you want to delete <strong>{{ idea.title }}</strong>?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            <a href="{% url 'idea_detail' pk=idea.pk %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
